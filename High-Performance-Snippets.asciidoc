@@ -1,0 +1,10 @@
+== High Performance Snippets
+
+video::http://www.youtube.com/embed/ZPmotBbYw-w[height='300', width='100%']
+
+.High Performance Snippets
+****
+Ads, buttons, widgets—third-party content is popular on today's websites. JavaScript provides a great way to mashup content from different sources. Unfortunately, in most cases, each JavaScript snippet is capable of bringing down the entire site.
+****
+
+

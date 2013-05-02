@@ -1,0 +1,8 @@
+== Your Script Just Killed My Site
+
+video::http://www.youtube.com/embed/aHDNmTpqi7w[height='300', width='100%']
+
+.Your Script Just Killed My Site
+****
+Hiccup. We all get them occasionally. So does the web. When an internet or server hiccup causes a script, stylesheet, or font file to timeout, the result can be devastating—the containing web page is likely to appear completely white for a minute or more. What's worse—your monitors are unlikely to register this outage. Don't worry—this probably won't happen to your website. Or will it?
+****

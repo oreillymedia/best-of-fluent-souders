@@ -6,3 +6,75 @@ video::http://www.youtube.com/embed/aHDNmTpqi7w[height='300', width='100%']
 ****
 Hiccup. We all get them occasionally. So does the web. When an internet or server hiccup causes a script, stylesheet, or font file to timeout, the result can be devastating—the containing web page is likely to appear completely white for a minute or more. What's worse—your monitors are unlikely to register this outage. Don't worry—this probably won't happen to your website. Or will it?
 ****
+
+=== Video Transcript
+
+Steve Souders: Everyone knows what I'm talking about. I'm talking about third party scripts. It's the most unreliable thing next to PowerPoint on a Macbook Air at a conference.
+
+[laughter]
+
+Steve: You can find the slides on my website. I'll put them up on SlideShare in a minute.
+
+We've all heard that expression a chain is only as strong as its weakest link. Now, in computer parlance, the phrase for that is single point of failure. It's the same idea. If you have a single component in your system, in your integrated system, and that single component fails and brings down the whole system, that's a single point of failure.
+
+In computer architecture, we don't like single points of failure. Most of us think about, I call it SPOF, most of us think about SPOF in terms of hardware architecture.
+
+Here's a canonical hardware diagram from Wikipedia. We see the router, single router in the middle of everything. If we only have one of those, and it has a hardware failure, the site is down. Similarly, the application server, if you only have one application server, it's a single point of failure. If that goes down, the website is down.
+
+We're familiar with that concept of single point of failure in terms of hardware. What about software?
+
+Most people who are working on production websites on the front end can look at this page and spot several single points of failure. How many see them? All right. No one. I see them. I see them every day.
+
+Widgets. Ads. In this page, I know, also, analytics. All of those are a single point of failure for this website, Business Insider. Why is that the case? It has to do with blocking. How about that? Isn't that great? Very appropriate? No feedback for that? A chuckle or something?
+
+Audience member: Woo.
+
+Steve: There we go. It has to do with blocking. Synchronous scripts, we probably, hopefully by now all know this. If you load an external script synchronously, every DOM element below that script tag in the page is blocked from rendering. Browsers have a lot of inconsistent behavior, but they're all unanimous on this. This is true in every browser.
+
+If any of those widgets, analytics or ads that I highlighted load a script synchronously, they can block the page, resulting in this behavior. Do we consider this a failure? I didn't have a piece of hardware failover. I consider this a failure. This is not a user experience that is going to keep our users coming back to our site. It's going to drive them away. That's a failure.
+
+How did this failure happen? Business Insider, they've got several third party snippets in their page. They've got Quantcast, but they're loading this script asynchronously. They've got insertBefore in there. They've got Google Analytics. Great pattern here. The Google command queue. Terrible name. GAQ. Who thought of that name? GAQ. They've got the GAQ queue going, so they're loading Google Analytics asynchronously.
+
+They've got KISSmetrics down there, probably not what you thought initially, and they're loading that asynchronously. Then there's the Twitter @Anywhere, and they're loading it synchronously. Script src equals blah. That's not asynchronous, and that's a fail.
+
+We know that this could block the page, maybe, if there's a failure, but realistically, how often does that happen. I call this front-end SPOF. We can find examples of it. In fact, I can give you an example that will reproduce this failure 100 percent of the time.
+
+We're going to use web pagetest to show it. If you don't know that, that's the number one takeaway from this talk. Go to web pagetest.org. We're going to test Business Insider, and I notice that it's blocked from rendering for somewhere between 20 and 30 seconds.
+
+How did that happen? We can see down below where this failure request occurred, and it's for the Twitter @Anywhere JavaScript. Why did it fail? Why did it take so long to fail? I did this test from inside China, behind the Great Firewall. Guess what? Twitter.com is blocked.
+
+It doesn't fail right away. It times out. I'm in IE here, and the timeout is 20 seconds. 20 seconds this script is taking to time out, and during that entire time, Business Insider is blank. Every user behind the Great Firewall in China, and there's more than a million or two people there...
+
+[laughter]
+
+Steve: ...is getting this experience. I don't know. Maybe Business Insider doesn't care about the audience in China. This is 100 percent reproducible. I wrote this blog post when Jean and I were there for Velocity China last December.
+
+How did that come about? Where did the failure occur? Here's the Twitter @Anywhere developer page, and they've got this in their snippet, in their pattern, that they're propagating to their users. They're saying, "Load it synchronously. Script src blah." They're putting it in the head above the body.
+
+Remember, every DOM element below the script tag is going to be blocked from rendering. The body is below the script tag, so that means everything in the page is going to be blank. If this times out, and in China, it times out. We get this behavior in China, but what about other places? Most of us aren't traveling to China. When we go there, we don't spend a lot of time on Business Insider. How about here in the US?
+
+Luckily, I run this project called the HTTP Archive. If you haven't tried it before, that's the number two takeaway from today. Go to httparchive.org. I analyze 200,000 websites twice a month, and I've got this big MySQL database at my disposal. I said, "Let me try to find some examples of this in the most recent run of these 200,000 websites. Let me select the URL of the page and the web pagetest ID." HTTP Archive runs on top of web pagetest.
+
+I'm going to pull it from the two main tables we have. Pages, which is the high level information, and requests, which is every individual request for the page. I have to join those. First of all, I'm going to select pages just in the most recent runs, and I'm going to join the two tables. I'm only going to look at sites that are ranked in the top 20,000 worldwide, try to narrow it down and find some more popular sites that experience this problem.
+
+That page has to contain a script that takes more than 10 seconds to load. The overall page is therefore going to be blocked from rendering for at least 10 seconds. I'm going to group it by page ID. Why did I go through all of this, a keynote with detailed SQL? Because all the code and data is downloadable, you can download this data and do the exact same analysis or other analyses if you want to.
+
+I did this analysis, and guess what? I found some examples. Here is...I can't read the website. This is Beta Brands. Top 20,000 website. It doesn't render for 10 to 15 seconds. If we look, it's because this request to a Facebook JavaScript file took 14 seconds to download. It was loaded synchronously. Script src equals blah. Not async, so it blocks the entire page from rendering.
+
+Here's another example. This is BigFollow. It's interesting because it's a way of attracting more Twitter followers, but for some reason, they're loading +1 and Facebook. Both of those took over 20 seconds to download, so it blocked the page from rendering. I don't know. Maybe +1 and Facebook knew about that, and they're trying to mess with BigFollow.
+
+I don't know why it took 20 seconds, but it did. It didn't happen on every website, but it happened on about 0.1 percent of the websites in the crawl. Here's another one loading something from Glam Media. They're the world's leader in curated social media. They are not the world's leader on high-performance, third-party snippets.
+
+[laughter]
+
+Steve: Here's another one that's got everything in there. Facebook and some Google and some Twitter. For some reason, they all took 5 to 10 seconds to download, blocking the rendering in the page.
+
+This is a problem. It does occur. Outages occur. Hiccups in the Internet occur. When that happens with third-party scripts that you've put into your page in a synchronous way, your site is going to go blank for your users. This has happened in the past. There are news articles about it. It happens every day, and it's going to continue to happen.
+
+This has been a cautionary tale of woe and foreboding, but it doesn't have to be that way. There's a sunny side to this picture. Unfortunately, we're out of time, so...
+
+[laughter]
+
+Steve: If you want to hear the sunny side, you've got to come to my talk at 11:50. Between now and then, I want you to ask yourself a question. What's your website's weakest link? I wouldn't be surprised if it's on the front end. Thank you.
+
+[applause]

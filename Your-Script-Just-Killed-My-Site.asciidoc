@@ -9,11 +9,11 @@ Hiccup. We all get them occasionally. So does the web. When an internet or serve
 
 === Video Transcript
 
-Steve Souders: Everyone knows what I'm talking about. I'm talking about third party scripts. It's the most unreliable thing next to PowerPoint on a Macbook Air at a conference.
+*Steve Souders:* Everyone knows what I'm talking about. I'm talking about third party scripts. It's the most unreliable thing next to PowerPoint on a Macbook Air at a conference.
 
-[laughter]
+_[laughter]_
 
-Steve: You can find the slides on my website. I'll put them up on SlideShare in a minute.
+*Steve:* You can find the slides on my website. I'll put them up on SlideShare in a minute.
 
 We've all heard that expression a chain is only as strong as its weakest link. Now, in computer parlance, the phrase for that is single point of failure. It's the same idea. If you have a single component in your system, in your integrated system, and that single component fails and brings down the whole system, that's a single point of failure.
 
@@ -27,9 +27,9 @@ Most people who are working on production websites on the front end can look at 
 
 Widgets. Ads. In this page, I know, also, analytics. All of those are a single point of failure for this website, Business Insider. Why is that the case? It has to do with blocking. How about that? Isn't that great? Very appropriate? No feedback for that? A chuckle or something?
 
-Audience member: Woo.
+*Audience member:* Woo.
 
-Steve: There we go. It has to do with blocking. Synchronous scripts, we probably, hopefully by now all know this. If you load an external script synchronously, every DOM element below that script tag in the page is blocked from rendering. Browsers have a lot of inconsistent behavior, but they're all unanimous on this. This is true in every browser.
+*Steve:* There we go. It has to do with blocking. Synchronous scripts, we probably, hopefully by now all know this. If you load an external script synchronously, every DOM element below that script tag in the page is blocked from rendering. Browsers have a lot of inconsistent behavior, but they're all unanimous on this. This is true in every browser.
 
 If any of those widgets, analytics or ads that I highlighted load a script synchronously, they can block the page, resulting in this behavior. Do we consider this a failure? I didn't have a piece of hardware failover. I consider this a failure. This is not a user experience that is going to keep our users coming back to our site. It's going to drive them away. That's a failure.
 
@@ -45,9 +45,9 @@ How did that happen? We can see down below where this failure request occurred, 
 
 It doesn't fail right away. It times out. I'm in IE here, and the timeout is 20 seconds. 20 seconds this script is taking to time out, and during that entire time, Business Insider is blank. Every user behind the Great Firewall in China, and there's more than a million or two people there...
 
-[laughter]
+_[laughter]_
 
-Steve: ...is getting this experience. I don't know. Maybe Business Insider doesn't care about the audience in China. This is 100 percent reproducible. I wrote this blog post when Jean and I were there for Velocity China last December.
+*Steve:* ...is getting this experience. I don't know. Maybe Business Insider doesn't care about the audience in China. This is 100 percent reproducible. I wrote this blog post when Jean and I were there for Velocity China last December.
 
 How did that come about? Where did the failure occur? Here's the Twitter @Anywhere developer page, and they've got this in their snippet, in their pattern, that they're propagating to their users. They're saying, "Load it synchronously. Script src blah." They're putting it in the head above the body.
 
@@ -65,16 +65,16 @@ Here's another example. This is BigFollow. It's interesting because it's a way o
 
 I don't know why it took 20 seconds, but it did. It didn't happen on every website, but it happened on about 0.1 percent of the websites in the crawl. Here's another one loading something from Glam Media. They're the world's leader in curated social media. They are not the world's leader on high-performance, third-party snippets.
 
-[laughter]
+_[laughter]_
 
-Steve: Here's another one that's got everything in there. Facebook and some Google and some Twitter. For some reason, they all took 5 to 10 seconds to download, blocking the rendering in the page.
+*Steve:* Here's another one that's got everything in there. Facebook and some Google and some Twitter. For some reason, they all took 5 to 10 seconds to download, blocking the rendering in the page.
 
 This is a problem. It does occur. Outages occur. Hiccups in the Internet occur. When that happens with third-party scripts that you've put into your page in a synchronous way, your site is going to go blank for your users. This has happened in the past. There are news articles about it. It happens every day, and it's going to continue to happen.
 
 This has been a cautionary tale of woe and foreboding, but it doesn't have to be that way. There's a sunny side to this picture. Unfortunately, we're out of time, so...
 
-[laughter]
+_[laughter]_
 
-Steve: If you want to hear the sunny side, you've got to come to my talk at 11:50. Between now and then, I want you to ask yourself a question. What's your website's weakest link? I wouldn't be surprised if it's on the front end. Thank you.
+*Steve:* If you want to hear the sunny side, you've got to come to my talk at 11:50. Between now and then, I want you to ask yourself a question. What's your website's weakest link? I wouldn't be surprised if it's on the front end. Thank you.
 
-[applause]
+_[applause]_

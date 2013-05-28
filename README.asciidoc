@@ -1,0 +1,10 @@
+== Best of Fluent (2012): Steve Souders
+
+Steve Souders works at Google on web performance and open source initiatives. He spoke at the 2012 http://fluentconf.com/fluent2012[O'Reilly Fluent conference]. This "Best Of" repository contains resources about his talks, including videos, transcripts, and links to other resources. His talks include:
+
+* http://chimera.labs.oreilly.com/books/1234000001653/ch01.html[High Performance Snippets]
+* http://chimera.labs.oreilly.com/books/1234000001653/ch02.html[Your Script Just Killed My Site]
+
+=== Contributing
+
+If you find any errors or you'd like to contribute to this repository, fork it and send us a pull request.
